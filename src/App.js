@@ -72,10 +72,23 @@ function App() {
     }
   };
 
-  // Load calculations when component mounts
-  useEffect(() => {
-    fetchCalculations();
-  }, []);
+// Load calculations when component mounts
+useEffect(() => {
+  const loadCalculations = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/calculations`);
+      const data = await response.json();
+      if (data.success) {
+        setCalculations(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching calculations:', error);
+      setMessage('❌ Could not connect to backend');
+    }
+  };
+  
+  loadCalculations();
+}, [BACKEND_URL]);
 
   return (
     <div className="App">
